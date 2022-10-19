@@ -136,6 +136,7 @@ function handleResult(displayOnSecondary = false) {
     };
 
     if (displayOnSecondary) {
+        operand1 = result;
         calculatorSecondaryDisplay.textContent = result;
         calculatorDisplay.textContent = "";
     } else {
