@@ -101,24 +101,30 @@ function handleOperationInput(event) {
 
 function handleResult(displayOnSecondary = false) {
 
+    let temp = 0; 
+    let symbol; 
+
     if (calculatorDisplay.textContent === "" || mode === modes.none || mode === modes.error) return;
     operand2 = Number.parseFloat(calculatorDisplay.textContent);
-    let temp = 0; 
 
     switch (mode) {
         case modes.add:
             // result = Number.parseFloat(temp.toFixed(calculatorDisplayMaxLength - ((""+Math.round(temp)).length+1)));
             // result = Number.parseFloat((operand1 * operand2).toFixed(calculatorDisplayMaxLength));
             temp = (operand1 + operand2);
+            symbol = " + ";
             break;
         case modes.subtract:
             temp = (operand1 - operand2);
+            symbol = " - ";
             break;
         case modes.divide:
             temp = (operand1 / operand2);
+            symbol = " / ";
             break;
         case modes.multiply:
             temp = (operand1 * operand2);
+            symbol = " * ";
             break;
     };
 
@@ -141,7 +147,7 @@ function handleResult(displayOnSecondary = false) {
         calculatorDisplay.textContent = "";
     } else {
         calculatorDisplay.textContent = result;
-        calculatorSecondaryDisplay.textContent = "";
+        calculatorSecondaryDisplay.textContent = operand1 + symbol + operand2;
         setMode(modes.none);
     };
 };
@@ -158,6 +164,7 @@ function handleClear() {
         setMode(modes.none);
     } else {
         if(mode === modes.error) setMode(modes.none); 
+        if(mode === modes.none) calculatorSecondaryDisplay.textContent = "";
         calculatorDisplay.textContent = "";
     }
 };
@@ -194,6 +201,7 @@ function handleBackspace() {
         calculatorDisplay.textContent = "";
         setMode(modes.none);
     } else {
+        if(mode === modes.none) calculatorSecondaryDisplay.textContent = ""; 
         if (calculatorDisplay.textContent.startsWith("-") && calculatorDisplay.textContent.length === 2) {
             calculatorDisplay.textContent = "";
         } else {
