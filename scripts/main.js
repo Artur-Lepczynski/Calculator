@@ -7,7 +7,7 @@ darkModeSwitch.addEventListener("change", (event) => {
         darkModeSwitchHead.style.left = "45px";
     } else {
         darkModeSwitchHead.style.left = "5px";
-    }; 
+    };
 });
 
 const calculator = document.querySelector("#calculator-wrapper");
@@ -30,7 +30,7 @@ calculatorButtons.addEventListener("click", (event) => {
     } else if (event.target.matches(".button-operation")) {
         handleOperationInput(event);
     } else if (event.target.matches("#button-equals")) {
-        handleResult();
+        handleResult(false, true);
     } else if (event.target.matches("#button-clear")) {
         handleClear();
     } else if (event.target.matches("#button-dot")) {
@@ -43,7 +43,6 @@ calculatorButtons.addEventListener("click", (event) => {
 });
 
 calculator.addEventListener("inputError", (event) => {
-    console.log("caught error:", event.detail);
     calculator.style.borderColor = "red";
     setTimeout(() => {
         calculator.style.borderColor = "";
@@ -51,23 +50,17 @@ calculator.addEventListener("inputError", (event) => {
 });
 
 function handleNumberInput(event) {
-    let number = event.target.dataset.number; 
+    let number = event.target.dataset.number;
 
-    if (mode === modes.error) {
-        calculatorDisplay.textContent = "";
-        calculatorDisplay.textContent += number;
-        setMode(modes.none);
-        return;
-    };
+    if(continued || mode === modes.error) clearAll(); 
 
     if (calculatorDisplay.textContent.length < calculatorDisplayMaxLength) {
-        if (event.target.textContent !== "0") {
+        if (number !== "0") {
             if (calculatorDisplay.textContent === "0") calculatorDisplay.textContent = "";
             calculatorDisplay.textContent += number;
         } else {
             if (calculatorDisplay.textContent !== "0") calculatorDisplay.textContent += number;
         };
-
     } else {
         calculator.dispatchEvent(new CustomEvent("inputError", { detail: "handleNumberInput" }));
     };
@@ -96,21 +89,32 @@ function handleOperationInput(event) {
         } else if (event.target.matches("#button-divide")) {
             setMode(modes.divide);
         };
-    }
+    };
 };
 
-function handleResult(displayOnSecondary = false) {
+let continued = false; 
+function handleResult(displayOnSecondary = false, trueClick = false) {
 
-    let temp = 0; 
-    let symbol; 
+    let temp = 0;
+    let symbol;
 
-    if (calculatorDisplay.textContent === "" || mode === modes.none || mode === modes.error) return;
-    operand2 = Number.parseFloat(calculatorDisplay.textContent);
+    if (calculatorDisplay.textContent === "" || mode === modes.none || mode === modes.error){
+        calculator.dispatchEvent(new CustomEvent("inputError", { detail: "handleResult" }));
+        return;
+    };
+
+    if(displayOnSecondary && continued){
+        operand1 = Number.parseFloat(calculatorDisplay.textContent);
+        calculatorSecondaryDisplay.textContent = operand1;
+        calculatorDisplay.textContent = "";
+        continued = false; 
+        return;
+    };
+
+    if (!trueClick || !continued) operand2 = Number.parseFloat(calculatorDisplay.textContent);
 
     switch (mode) {
         case modes.add:
-            // result = Number.parseFloat(temp.toFixed(calculatorDisplayMaxLength - ((""+Math.round(temp)).length+1)));
-            // result = Number.parseFloat((operand1 * operand2).toFixed(calculatorDisplayMaxLength));
             temp = (operand1 + operand2);
             symbol = " + ";
             break;
@@ -128,10 +132,10 @@ function handleResult(displayOnSecondary = false) {
             break;
     };
 
-    if(!Number.isInteger(temp)){
-        result = Number.parseFloat(temp.toFixed(calculatorDisplayMaxLength - ((""+Math.round(temp)).length+1)));
-    }else{
-        result = temp; 
+    if (!Number.isInteger(temp)) {
+        result = Number.parseFloat(temp.toFixed(calculatorDisplayMaxLength - (("" + Math.round(temp)).length + 1)));
+    } else {
+        result = temp;
     };
 
     if (result === Infinity || result === -Infinity || isNaN(result) || result.toString().length > calculatorDisplayMaxLength) {
@@ -148,29 +152,31 @@ function handleResult(displayOnSecondary = false) {
     } else {
         calculatorDisplay.textContent = result;
         calculatorSecondaryDisplay.textContent = operand1 + symbol + operand2;
-        setMode(modes.none);
+        operand1 = result;
+        continued = true;
     };
 };
 
 function setMode(newMode) {
     //TODO: add and remove styling
     mode = newMode;
-    console.log("set mode:", mode);
 };
 
 function handleClear() {
-    if (calculatorDisplay.textContent === "") {
+    if(continued){
+        clearAll();
+    } else if (calculatorDisplay.textContent === "") {
         calculatorSecondaryDisplay.textContent = "";
         setMode(modes.none);
     } else {
-        if(mode === modes.error) setMode(modes.none); 
-        if(mode === modes.none) calculatorSecondaryDisplay.textContent = "";
+        if (mode === modes.error) setMode(modes.none);
+        if (mode === modes.none) calculatorSecondaryDisplay.textContent = "";
         calculatorDisplay.textContent = "";
-    }
+    };
 };
 
 function handleDot() {
-    if(mode === modes.error){
+    if (mode === modes.error) {
         calculatorDisplay.textContent = "0.";
         setMode(modes.none);
     } else if (calculatorDisplay.textContent === "") {
@@ -179,19 +185,26 @@ function handleDot() {
         calculatorDisplay.textContent = "";
     } else if (calculatorDisplay.textContent.endsWith(".")) {
         calculatorDisplay.textContent = calculatorDisplay.textContent.slice(0, calculatorDisplay.textContent.length - 1);
-    } else if (!calculatorDisplay.textContent.endsWith(".") && !calculatorDisplay.textContent.split("").includes(".")) {
+    } else if (!calculatorDisplay.textContent.split("").includes(".")) {
         calculatorDisplay.textContent += ".";
+    }else{
+        calculator.dispatchEvent(new CustomEvent("inputError", { detail: "handleDot" }));
     };
-}
+};
 
 function handleSignChange() {
     if (calculatorDisplay.textContent !== "" && mode !== modes.error) {
+        if(continued){
+            calculatorSecondaryDisplay.textContent = "";
+            continued = false;
+            setMode(modes.none);
+        };
         if (calculatorDisplay.textContent.startsWith("-")) {
             calculatorDisplay.textContent = calculatorDisplay.textContent.slice(1, calculatorDisplay.textContent.length);
         } else {
             calculatorDisplay.textContent = "-" + calculatorDisplay.textContent;
         };
-    }else{
+    } else {
         calculator.dispatchEvent(new CustomEvent("inputError", { detail: "handleSignChange" }));
     };
 };
@@ -201,110 +214,23 @@ function handleBackspace() {
         calculatorDisplay.textContent = "";
         setMode(modes.none);
     } else {
-        if(mode === modes.none) calculatorSecondaryDisplay.textContent = ""; 
+        if(continued){
+            continued = false;
+            setMode(modes.none);
+        };
+        if (mode === modes.none) calculatorSecondaryDisplay.textContent = "";
         if (calculatorDisplay.textContent.startsWith("-") && calculatorDisplay.textContent.length === 2) {
             calculatorDisplay.textContent = "";
         } else {
-            calculatorDisplay.textContent = calculatorDisplay.textContent.slice(0, calculatorDisplay.textContent.length - 1);
+            calculatorDisplay.textContent = calculatorDisplay.textContent.slice(0, calculatorDisplay.textContent.length - 1); 
         };
     };
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+function clearAll(){
+    calculatorSecondaryDisplay.textContent = "";
+    calculatorDisplay.textContent = "";
+    operand2 = undefined;
+    continued = false; 
+    setMode(modes.none);
+};
