@@ -1,14 +1,21 @@
+:root{
+    --header-height: 60px;
+    --max-content-width: 1600px;
+}
+
 body{
     margin: 0px; 
     min-height: 100vh;
-    background-color: var(--background-color-1);
+    background-color: var(--background-color-2);
+    font-family: Inter, sans-serif;
 }
 
-header{
+#header{
     width: 100%; 
-    height: 60px;
-    /* background-color: rgb(64, 194, 194); */
-    position: absolute;
+    max-width: var(--max-content-width);
+    height: var(--header-height);
+    margin: auto;
+    background-color: var(--background-color-1);
     display: flex;
     flex-direction: row-reverse;
 }
@@ -55,29 +62,33 @@ header{
 }
 
 main{
-    width: 100%; 
-    height: 100vh; 
+    width: 100%;
+    max-width: var(--max-content-width);
+    margin: auto;
+    height: calc(100vh - var(--header-height));
     display: grid;
     align-items: center;
+    background-color: var(--background-color-1);
 }
 
 #calculator-wrapper{
     width: 400px; 
-    height: 630px; 
+    height: 620px; 
     margin: auto; 
     border: 3px solid var(--main-color-2);
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+    bottom: calc(var(--header-height) * 0.5);
     /* background-color: crimson; */
     display: flex;
     flex-direction: column;
 }
 
-.input-error{
-    border-color: red; 
-}
-
 #calculator-secondary-display{
     flex-basis: 30px;
-    background-color: rgb(219, 141, 141);
+    background-color: var(--main-color-1);
+    border-bottom: 2px solid var(--main-color-2);
     display: grid;
     align-items: center;
 }
@@ -89,8 +100,9 @@ main{
 }
 
 #calculator-display{
-    flex-basis: 130px;
-    background-color: azure;
+    flex-basis: 120px;
+    border-bottom: 2px solid var(--main-color-2);
+    background-color: var(--main-color-1);
     display: grid;
     align-items: center;
 }
@@ -103,10 +115,19 @@ main{
 
 #calculator-buttons{
     flex-grow: 1;
+    padding: 5px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(5, 1fr);
     gap: 5px;
+}
+
+button{
+    border: none;
+    border-radius: 12px;
+    background-color: var(--main-color-3);
+    font-size: 28px;
+    cursor: pointer;
 }
 
 #button-equals{
@@ -114,6 +135,33 @@ main{
 }
 
 
+
+@media screen and (max-width: 400px) {
+    #calculator-wrapper{
+        width: 95%;
+        height: 95%;
+        margin: 10px auto;
+        bottom: 0px;
+        box-sizing: border-box;
+    }
+}
+
+@media screen and (orientation: landscape) and (max-height: 400px){
+    #calculator-wrapper{
+        width: 95%;
+        height: 98%;
+        bottom: 0px;
+        box-sizing: border-box;
+    }
+
+    #calculator-display{
+        flex-basis: 70px;
+    }
+
+    #calculator-secondary-display{
+        flex-basis: 20px;
+    }
+}
 
 
 
