@@ -1,0 +1,32 @@
+:root{
+    --text-color: rgb(219, 219, 219); 
+
+    /* oper, = buttons hover */
+    --accent-color-1: rgb(8, 197, 118);
+    /* oper buttons */
+    --accent-color-2: rgb(8, 173, 104);
+    /* = button */
+    --accent-color-3: rgb(9, 150, 91);
+    /* moon icon */
+    --accent-color-4: rgb(231, 243, 126); 
+    /* all button shadows */
+    --accent-shadow-1: rgb(12, 15, 15);
+
+    /* oper, = button active */
+    --active-color-1:rgb(173, 8, 77);
+
+    /* calc screens and switch head */
+    --main-color-1: rgb(55, 54, 65);
+    /* calc borders */
+    --main-color-2: rgb(91, 88, 107); 
+    /* calc buttons number */
+    --main-color-3: rgb(63, 61, 75); 
+    /* calc, other button hover */
+    --main-color-4: rgb(72, 69, 85);
+    /* buttons not oper: active */
+    --main-color-5: rgb(81, 78, 95);
+
+    --background-color-1: rgb(48, 47, 56); 
+    --background-color-2: rgb(31, 30, 36);  
+
+}

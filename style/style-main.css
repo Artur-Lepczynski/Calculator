@@ -1,13 +1,20 @@
 :root{
     --header-height: 60px;
     --max-content-width: 1600px;
+    --main-transition-duration: 70ms; 
 }
 
 body{
-    margin: 0px; 
     min-height: 100vh;
+    margin: 0px; 
+    color: var(--text-color);
     background-color: var(--background-color-2);
     font-family: Inter, sans-serif;
+}
+
+*{
+    transition-property: box-shadow, background-color;
+    transition-duration: var(--main-transition-duration);
 }
 
 #header{
@@ -15,6 +22,8 @@ body{
     max-width: var(--max-content-width);
     height: var(--header-height);
     margin: auto;
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
     background-color: var(--background-color-1);
     display: flex;
     flex-direction: row-reverse;
@@ -27,12 +36,11 @@ body{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    /* background-color: brown; */
 }
 
 #dark-mode-icon{
-    font-size: 2em;
     color: var(--accent-color-4);
+    font-size: 2em;
 }
 
 #dark-mode-switch-label{
@@ -54,18 +62,20 @@ body{
     height: 30px;
     width: 30px;
     border-radius: 100px;
-    background-color: var(--main-color-1); 
     position: absolute; 
     top: 5px;
     left: 5px;
+    background-color: var(--main-color-1); 
     transition: left 200ms;
 }
 
 main{
     width: 100%;
     max-width: var(--max-content-width);
-    margin: auto;
     height: calc(100vh - var(--header-height));
+    margin: auto;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
     display: grid;
     align-items: center;
     background-color: var(--background-color-1);
@@ -77,26 +87,26 @@ main{
     margin: auto; 
     border: 3px solid var(--main-color-2);
     border-radius: 15px;
-    overflow: hidden;
     position: relative;
     bottom: calc(var(--header-height) * 0.5);
-    /* background-color: crimson; */
     display: flex;
     flex-direction: column;
+    transition: border-color 100ms;
+    overflow: hidden;
 }
 
 #calculator-secondary-display{
     flex-basis: 30px;
-    background-color: var(--main-color-1);
     border-bottom: 2px solid var(--main-color-2);
+    background-color: var(--main-color-1);
     display: grid;
     align-items: center;
 }
 
 #calculator-secondary-display-text{
+    margin: 0px 10px;
     text-align: right;
     font-size: 16px;
-    margin: 0px 10px;
 }
 
 #calculator-display{
@@ -108,9 +118,9 @@ main{
 }
 
 #calculator-display-text{
+    margin: 0px 10px;
     text-align: right;
     font-size: 48px;
-    margin: 0px 10px;
 }
 
 #calculator-buttons{
@@ -126,15 +136,62 @@ button{
     border: none;
     border-radius: 12px;
     background-color: var(--main-color-3);
+    color: var(--text-color);
+    font-family: Inter, sans-serif;
     font-size: 28px;
+    transition-property: box-shadow, background-color;
+    transition-duration: var(--main-transition-duration);
     cursor: pointer;
+    box-shadow: inset 0px -4px var(--accent-shadow-1);
+}
+
+button:active{
+    box-shadow: inset 0px 4px var(--accent-shadow-1);
+}
+
+button i, button span{
+    position: relative;
+    top: 0px;
+    transition-property: top;
+    transition-duration: var(--main-transition-duration);
+}
+
+.button-pressed{
+    top: 5px;
 }
 
 #button-equals{
     grid-column: 3 / 5;
+    background-color: var(--accent-color-3);
 }
 
+.button-operation{
+    background-color: var(--accent-color-2);
+}
 
+.button-operation-selected{
+    background-color: var(--active-color-1);
+}
+
+.button-operation-has-hover:hover{
+    background-color: var(--accent-color-1);
+}
+
+#button-equals:hover{
+    background-color: var(--accent-color-1);
+}
+
+#button-equals:active, .button-operation:active{
+    background-color: var(--active-color-1);
+}
+
+.button-number:hover, #button-clear:hover, #button-backspace:hover, #button-sign:hover, #button-dot:hover{
+background-color: var(--main-color-4);
+}
+
+.button-number:active, #button-clear:active, #button-backspace:active, #button-sign:active, #button-dot:active{
+    background-color: var(--main-color-5);
+}
 
 @media screen and (max-width: 400px) {
     #calculator-wrapper{

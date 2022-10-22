@@ -6,8 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style/style-main.css">
-    <link rel="stylesheet" href="./style/style-main-light.css">
-    <link rel="stylesheet" disabled href="./style/style-main-dark.css">
+    <link id="link-light-style" rel="stylesheet" href="./style/style-main-light.css">
+    <link id="link-dark-style" rel="stylesheet" disabled href="./style/style-main-dark.css"> 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter">
     <script src="https://kit.fontawesome.com/c37a45aba4.js" crossorigin="anonymous"></script>
     <title>Calculator</title>
@@ -39,32 +39,32 @@
 
             <div id="calculator-buttons">
 
-                <button id="button-clear">C</button>
+                <button id="button-clear"><span>C</span></button>
                 <button id="button-backspace"><i class="fa-solid fa-delete-left"></i></button>
                 <button id="button-sign"><i class="fa-solid fa-plus-minus"></i></button>
-                <button class="button-operation" id="button-divide"><i class="fa-solid fa-divide"></i></button>
+                <button class="button-operation button-operation-has-hover" id="button-divide"><i class="fa-solid fa-divide"></i></button>
 
-                <button class="button-number" id="button-7" data-number="7">7</button>
-                <button class="button-number" id="button-8" data-number="8">8</button>
-                <button class="button-number" id="button-9" data-number="9">9</button>
-                <button class="button-operation" id="button-multiply"><i class="fa-solid fa-xmark"></i></button>
+                <button class="button-number" id="button-7" data-number="7"><span>7</span></button>
+                <button class="button-number" id="button-8" data-number="8"><span>8</span></button>
+                <button class="button-number" id="button-9" data-number="9"><span>9</span></button>
+                <button class="button-operation button-operation-has-hover" id="button-multiply"><i class="fa-solid fa-xmark"></i></button>
 
-                <button class="button-number" id="button-4" data-number="4">4</button>
-                <button class="button-number" id="button-5" data-number="5">5</button>
-                <button class="button-number" id="button-6" data-number="6">6</button>
-                <button class="button-operation" id="button-subtract"><i class="fa-solid fa-minus"></i></button>
+                <button class="button-number" id="button-4" data-number="4"><span>4</span></button>
+                <button class="button-number" id="button-5" data-number="5"><span>5</span></button>
+                <button class="button-number" id="button-6" data-number="6"><span>6</span></button>
+                <button class="button-operation button-operation-has-hover" id="button-subtract"><i class="fa-solid fa-minus"></i></button>
 
 
-                <button class="button-number" id="button-1" data-number="1">1</button>
-                <button class="button-number" id="button-2" data-number="2">2</button>
-                <button class="button-number" id="button-3" data-number="3">3</button>
-                <button class="button-operation" id="button-add"><i class="fa-solid fa-plus"></i></button>
+                <button class="button-number" id="button-1" data-number="1"><span>1</span></button>
+                <button class="button-number" id="button-2" data-number="2"><span>2</span></button>
+                <button class="button-number" id="button-3" data-number="3"><span>3</span></button>
+                <button class="button-operation button-operation-has-hover" id="button-add"><i class="fa-solid fa-plus"></i></button>
 
-                <button id="button-dot">.</button>
-                <button class="button-number" id="button-0" data-number="0">0</button>
+                <button id="button-dot"><span>.</span></button>
+                <button class="button-number" id="button-0" data-number="0"><span>0</span></button>
                 <button id="button-equals"><i class="fa-solid fa-equals"></i></button>
 
-            </div>
+            </div> 
         </div>
     </main>
 </body>

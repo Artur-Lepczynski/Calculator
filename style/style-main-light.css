@@ -1,18 +1,32 @@
 :root{
+    --text-color: black;
+
+    /* oper, = buttons hover */
     --accent-color-1: rgb(0, 195, 221);
+    /* oper buttons */
     --accent-color-2: rgb(0, 171, 194);
+    /* = button */
     --accent-color-3: rgb(0, 152, 172);
+    /* moon icon */
     --accent-color-4: rgb(0, 45, 51); 
+    /* all button shadows */
+    --accent-shadow-1: rgb(1, 45, 51);
+
+    /* oper, = button active */
+    --active-color-1:rgb(194, 0, 74);
 
     /* calc screens and switch head */
     --main-color-1: rgb(250, 250, 250); 
     /* calc borders */
     --main-color-2: rgb(212, 212, 212); 
     /* calc buttons number */
-    --main-color-3: rgb(229, 230, 221); 
-
+    --main-color-3: rgb(212, 212, 204); 
+    /* calc, other button hover */
+    --main-color-4: rgb(223, 221, 198);
+    /* buttons - oper: active */
+    --main-color-5: rgb(194, 191, 162);
 
     --background-color-1: rgb(242, 243, 236); 
-    --background-color-2: rgb(219, 217, 202); 
+    --background-color-2: rgb(216, 218, 207); 
 
 }

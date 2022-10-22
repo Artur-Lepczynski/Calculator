@@ -1,12 +1,18 @@
 const darkModeSwitch = document.querySelector("#dark-mode-switch");
 const darkModeSwitchHead = darkModeSwitch.nextElementSibling;
+const lightModeStyle = document.querySelector("#link-light-style");
+const darkModeStyle = document.querySelector("#link-dark-style");
 
 darkModeSwitch.addEventListener("change", (event) => {
     //TODO: change page styling 
     if (darkModeSwitch.checked) {
         darkModeSwitchHead.style.left = "45px";
+        darkModeStyle.disabled = false; 
+        lightModeStyle.disabled = true; 
     } else {
         darkModeSwitchHead.style.left = "5px";
+        darkModeStyle.disabled = true; 
+        lightModeStyle.disabled = false; 
     };
 });
 
@@ -24,16 +30,17 @@ const modes = { none: "none", error: "error", add: "add", subtract: "subtract", 
 Object.freeze(modes);
 let mode = modes.none;
 
-calculatorButtons.addEventListener("click", (event) => {
-    if (event.target.matches(".button-number")) {
+calculatorButtons.addEventListener("pointerdown", (event) => {
+    if(event.target.matches("button, i, span")) handleClickEffect(event.target); 
+    if (event.target.matches(".button-number, .button-number > span")) {
         handleNumberInput(event);
     } else if (event.target.matches(".button-operation, .button-operation > i")) {
         handleOperationInput(event);
     } else if (event.target.matches("#button-equals, #button-equals > i")) {
         handleResult(false, true);
-    } else if (event.target.matches("#button-clear")) {
+    } else if (event.target.matches("#button-clear, #button-clear > span")) {
         handleClear();
-    } else if (event.target.matches("#button-dot")) {
+    } else if (event.target.matches("#button-dot, #button-dot > span")) {
         handleDot();
     } else if (event.target.matches("#button-backspace, #button-backspace > i")) {
         handleBackspace();
@@ -43,13 +50,27 @@ calculatorButtons.addEventListener("click", (event) => {
     handlecalculatorDisplayFontSizeChange();
 });
 
+let lastPressedTarget; 
+
+document.addEventListener("pointerup", (event) => {
+    if(lastPressedTarget){
+        handleClickEffect(lastPressedTarget); 
+        lastPressedTarget = null; 
+    };
+});
+
 calculator.addEventListener("inputError", (event) => {
-    console.log("error", event.detail);
     calculator.style.borderColor = "red";
     setTimeout(() => {
         calculator.style.borderColor = "";
     }, 100);
 });
+
+function handleClickEffect(target){ 
+    if(target.matches("button")) target = target.firstElementChild; 
+    lastPressedTarget = target;
+    target.classList.toggle("button-pressed"); 
+};
 
 function handlecalculatorDisplayFontSizeChange() {
     let length = calculatorDisplay.textContent.length;
@@ -57,7 +78,7 @@ function handlecalculatorDisplayFontSizeChange() {
 };
 
 function handleNumberInput(event) {
-    let number = event.target.dataset.number;
+    let number = event.target.matches("span") ? event.target.parentElement.dataset.number : event.target.dataset.number;
 
     if (continued || mode === modes.error) clearAll();
 
@@ -178,10 +199,43 @@ function handleResult(displayOnSecondary = false, trueClick = false) {
     };
 };
 
+const buttonDivide = document.querySelector("#button-divide"); 
+const buttonMultiply = document.querySelector("#button-multiply"); 
+const buttonSubtract = document.querySelector("#button-subtract"); 
+const buttonAdd = document.querySelector("#button-add"); 
+const operationButtons = [buttonDivide, buttonMultiply, buttonSubtract, buttonAdd];
+
 function setMode(newMode) {
-    //TODO: add and remove styling
     mode = newMode;
-    console.log("mode change:", mode);
+    switch(mode){
+        case modes.divide:
+            applyOperationStyle(buttonDivide);
+            break;
+        case modes.multiply:
+            applyOperationStyle(buttonMultiply);
+            break;
+        case modes.subtract: 
+            applyOperationStyle(buttonSubtract);
+            break;
+        case modes.add:
+            applyOperationStyle(buttonAdd);
+            break;
+        default: 
+            applyOperationStyle(null);
+    }
+    
+    function applyOperationStyle(button){
+        operationButtons.forEach((item)=>{
+            if(item === button){
+                item.classList.remove("button-operation-has-hover");
+                item.classList.add("button-operation-selected");
+            }else{
+                item.classList.remove("button-operation-selected");
+                item.classList.add("button-operation-has-hover");
+            };
+        });  
+    };
+
 };
 
 function handleClear() {
